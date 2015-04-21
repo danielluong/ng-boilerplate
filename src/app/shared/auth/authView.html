@@ -1,0 +1,19 @@
+<div id="auth">
+    <form name="authForm" ng-submit="auth.submit(authForm.$valid)" novalidate>
+        <div class="error-notice" ng-show="auth.error">{{ auth.error }}</div>
+        <div class="auth-form-inputs-con" ng-hide="auth.loading">
+        	<div class="username-input-con">
+                <div class="inline-input">
+                    <input type="text" name="username" id="usernameInput" placeholder="Username" ng-model="auth.credentials.username" autocomplete="off" required />
+                </div>
+        	</div>
+        	<div class="password-input-con">
+                <div class="inline-input">
+                    <input type="password" name="password" id="passwordInput" placeholder="Password" ng-model="auth.credentials.password" autocomplete="off" required />
+                </div>
+        	</div>
+        </div>
+        <div class="loader" ng-show="auth.loading"></div>
+        <input type="submit" value="sign in" id="signInBtn" ng-disabled="auth.loading" />
+    </form>
+</div>
