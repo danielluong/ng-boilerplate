@@ -13,9 +13,9 @@
         $stateProvider
             .state('login', {
                 url: '/login',
-                templateUrl: 'app/shared/auth/authView.html',
-                controller: 'authController',
-                controllerAs: 'auth',
+                templateUrl: 'app/components/login/loginView.html',
+                controller: 'loginController',
+                controllerAs: 'login',
                 isPublic: true
             })
             .state('main', {

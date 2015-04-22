@@ -2,12 +2,12 @@
     'use strict';
 
     angular
-        .module('app.auth')
-        .controller('authController', authController);
+        .module('app.login')
+        .controller('loginController', loginController);
     
-    authController.$inject = ['authService', '$rootScope', '$state', 'CONFIG', 'resourceService'];
+    loginController.$inject = ['authService', '$rootScope', '$state', 'CONFIG', 'resourceService'];
 
-    function authController(authService, $rootScope, $state, CONFIG, resourceService){
+    function loginController(authService, $rootScope, $state, CONFIG, resourceService){
         /* jshint validthis: true */
         var vm = this;
         

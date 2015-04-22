@@ -4,11 +4,12 @@
     angular.module('app', [
         'app.utils',
         'app.directives',
+        'app.auth',
 
         'ui.router',
         'ngAnimate',
         
-        'app.auth',
+        'app.login',
         'app.main'
     ]);
 })();
