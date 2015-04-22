@@ -18,7 +18,7 @@
             if(!toState.isPublic && typeof $rootScope.authToken === 'undefined'){
                 event.preventDefault();
                 $rootScope.redirectTo = { state: toState, params: toParams };
-                $state.go('auth', { redirectTo: toState.url });
+                $state.go('login', { redirectTo: toState.url });
             }
         });
     };

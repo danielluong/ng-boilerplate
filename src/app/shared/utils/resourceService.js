@@ -65,7 +65,7 @@
                     if(response.status === 401){
                         response.data = { canceled: true, message: ['Error 401 Unauthorized'] };
                         $rootScope.redirectTo = { state: $state.current, params: $state.params };
-                        $state.go('auth', { redirectTo: $state.current.url });
+                        $state.go('login', { redirectTo: $state.current.url });
                     } else if(response.status === 401 || !angular.isObject(response.data) || !response.data.message){
                         response.data = { canceled: response.status === 0, message: ['An unknown error occurred.'] };
                     }

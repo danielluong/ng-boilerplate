@@ -11,7 +11,7 @@
         $urlRouterProvider.otherwise('/');
 
         $stateProvider
-            .state('auth', {
+            .state('login', {
                 url: '/login',
                 templateUrl: 'app/shared/auth/authView.html',
                 controller: 'authController',
@@ -28,7 +28,8 @@
                 url: '/',
                 controller: ['$state', 'CONFIG', function($state, CONFIG){
                     $state.go(CONFIG.defaultState);
-                }]
+                }],
+                isPublic: true
             });
     }
 })();
