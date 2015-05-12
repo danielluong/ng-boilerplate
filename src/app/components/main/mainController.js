@@ -11,9 +11,9 @@
         /* jshint validthis: true */
         var vm = this;
 
-        activate();
+        init();
 
-        function activate(){
+        function init(){
         }
     };
 })();

@@ -17,19 +17,21 @@
         .module('app.utils')
         .service('resourceService', resourceService);
 
-    resourceService.$inject = ['CONFIG', '$q', '$http', '$rootScope', '$state'];
+    resourceService.$inject = ['$rootScope', '$q', '$http', '$state'];
 
-    function resourceService(CONFIG, $q, $http, $rootScope, $state){
+    function resourceService($rootScope, $q, $http, $state){
     
         return {
+            xhr: xhr,
             query: query,
             get: get,
-            save: save,
-            update: update,
-            remove: remove
+            post: post,
+            put: put,
+            patch: patch,
+            delete: destroy
         };
 
-        function xhrPromise(method, url, requestData){
+        function xhr(method, url, requestData){
             // The timeout property of the http request takes a deferred value
             // that will abort the underying AJAX request if / when the deferred
             // value is resolved.
@@ -38,7 +40,7 @@
             // Set AJAX request parameters.
             var options = {
                 method: method,
-                url: url,
+                url: $rootScope.CONFIG.apiBaseUrl + url,
                 timeout: deferredAbort.promise
             };
 
@@ -63,11 +65,13 @@
                 },
                 function(response){
                     if(response.status === 401){
-                        response.data = { canceled: true, message: ['Error 401 Unauthorized'] };
                         $rootScope.redirectTo = { state: $state.current, params: $state.params };
                         $state.go('login', { redirectTo: $state.current.url });
-                    } else if(response.status === 401 || !angular.isObject(response.data) || !response.data.message){
-                        response.data = { canceled: response.status === 0, message: ['An unknown error occurred.'] };
+                    } else if(!angular.isObject(response.data) || !angular.isObject(response.data.error) || !response.data.error.message){
+                        response = { 
+                            canceled: response.status === 0,
+                            data: { message: 'An unknown error occurred.' }
+                        };
                     }
 
                     return $q.reject(response.data);
@@ -95,27 +99,30 @@
             );
 
             return promise;
-
-        };
+        }
 
         function query(type, params){
-            return xhrPromise('GET', CONFIG.apiBaseUrl + type, params);
-        };
+            return xhr('GET', type, params);
+        }
 
         function get(type, id, params){
-            return xhrPromise('GET', CONFIG.apiBaseUrl + type + '/' + id, params);
-        };
+            return xhr('GET', type + '/' + id, params);
+        }
 
-        function save(type, data){
-            return xhrPromise('POST', CONFIG.apiBaseUrl + type, data);
-        };
+        function post(type, data){
+            return xhr('POST', type, data);
+        }
 
-        function update(type, id, data){
-            return xhrPromise('PATCH', CONFIG.apiBaseUrl + type + '/' + id, data);
-        };
+        function put(type, id, data){
+            return xhr('PUT', type + '/' + id, data);
+        }
 
-        function remove(type, id){
-            return xhrPromise('DELETE', CONFIG.apiBaseUrl + type + '/' + id);
-        };
-    };
+        function patch(type, id, data){
+            return xhr('PATCH', type + '/' + id, data);
+        }
+
+        function destroy(type, id){
+            return xhr('DELETE', type + '/' + id);
+        }
+    }
 })();

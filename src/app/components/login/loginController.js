@@ -5,46 +5,47 @@
         .module('app.login')
         .controller('loginController', loginController);
     
-    loginController.$inject = ['authService', '$rootScope', '$state', 'CONFIG', 'resourceService'];
+    loginController.$inject = ['authService', '$rootScope', '$state'];
 
-    function loginController(authService, $rootScope, $state, CONFIG, resourceService){
+    function loginController(authService, $rootScope, $state){
         /* jshint validthis: true */
         var vm = this;
         
-        vm.submit = submit;
         vm.loading = false;
-        vm.error = false;
+        vm.errors = [];
+        vm.credentials = {};
+        vm.submit = submit;
 
-        activate();
+        init();
 
-        function activate(){
+        function init(){
             authService.logout();
-        };
+        }
 
-        function submit(isValid){
-            if(!isValid){
+        function submit(){
+            if(vm.loading){
                 return;
             }
 
             vm.loading = true;
-            vm.error = false;
+            vm.errors = [];
 
-            authService.login(vm.credentials.username, vm.credentials.password)
+            authService.login(vm.credentials)
             .then(function(response){
-                authService.setToken(vm.credentials.username, vm.credentials.password);
+                authService.setUser(response.data.data);
                 
                 if($rootScope.redirectTo){
                     $state.go($rootScope.redirectTo.state.name, $rootScope.redirectTo.params);
                     delete $rootScope.redirectTo;
                 } else {
-                    $state.go(CONFIG.defaultState);
+                    $state.go('default');
                 }
             }, function(response){
-                vm.error = 'The username and password you entered did not match our records. Please double-check and try again.';
+                vm.errors = response.data.error.message.split('\\n');
             })
             .finally(function(){
                 vm.loading = false;
             });
-        };
-    };
+        }
+    }
 })();

@@ -1,19 +1,10 @@
-<div id="login">
-    <form name="loginForm" ng-submit="login.submit(loginForm.$valid)" novalidate>
-        <div class="error-notice" ng-show="login.error">{{ login.error }}</div>
-        <div class="login-form-inputs-con" ng-hide="login.loading">
-            <div class="username-input-con">
-                <div class="inline-input">
-                    <input type="text" name="username" id="usernameInput" placeholder="Username" ng-model="login.credentials.username" autocomplete="off" required />
-                </div>
-            </div>
-            <div class="password-input-con">
-                <div class="inline-input">
-                    <input type="password" name="password" id="passwordInput" placeholder="Password" ng-model="login.credentials.password" autocomplete="off" required />
-                </div>
-            </div>
-        </div>
-        <div class="loader" ng-show="login.loading"></div>
-        <input type="submit" value="sign in" id="signInBtn" ng-disabled="login.loading" />
+<div id="login-view">
+    <form name="loginForm" ng-submit="login.submit()" novalidate>
+        <ul class="errors" ng-if="login.errors.length > 0">
+            <li ng-repeat="error in login.errors" class="error">{{ error }}</li>
+        </ul>
+        <input type="email" placeholder="Email" ng-model="login.credentials.email" autocomplete="off" required />
+        <input type="password" placeholder="Password" ng-model="login.credentials.password" autocomplete="off" required />
+        <input type="submit" value="sign in" />
     </form>
 </div>

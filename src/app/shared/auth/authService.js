@@ -5,25 +5,20 @@
         .module('app.auth')
         .service('authService', authService);
 
-    authService.$inject = ['CONFIG', 'base64Service', '$q', '$http', '$cookieStore', '$rootScope', '$timeout'];
+    authService.$inject = ['$rootScope', '$q', '$http', '$cookieStore', 'base64Service'];
 
-    function authService(CONFIG, base64Service, $q, $http, $cookieStore, $rootScope, $timeout){
-        var endpoint = 'users/';
+    function authService($rootScope, $q, $http, $cookieStore, base64Service){
 
         return {
             login: login,
-            setToken: setToken,
+            setUser: setUser,
             logout: logout
         };
 
-        function login(username, password){
-            var token = base64Service.encode(username + ':' + password);
-
+        function login(credentials){
             var d = $q.defer();
 
-            $http.get(CONFIG.apiBaseUrl + endpoint + username, {
-                headers: { 'Authorization': 'Basic ' + token }
-            })
+            $http.post($rootScope.CONFIG.apiBaseUrl + 'login', credentials)
             .success(function(data, status, headers, config){
                 d.resolve({
                     data: data,
@@ -42,18 +37,18 @@
             });
 
             return d.promise;
-        };
+        }
 
-        function setToken(username, password){
-            $rootScope.authToken = base64Service.encode(username + ':' + password);
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.authToken;
-            $cookieStore.put('authToken', $rootScope.authToken);
-        };
+        function setUser(user){
+            $rootScope.user = user;
+            $http.defaults.headers.common['token'] = $rootScope.user.token;
+            $cookieStore.put('user', base64Service.encode(JSON.stringify($rootScope.user)));
+        }
 
         function logout(){
-            delete $rootScope.authToken;
-            $http.defaults.headers.common.Authorization = 'Basic ';
-            $cookieStore.remove('authToken');
-        };
+            delete $rootScope.user;
+            delete $http.defaults.headers.common['token'];
+            $cookieStore.remove('user');
+        }
     }
 })();

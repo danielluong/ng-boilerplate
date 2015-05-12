@@ -3,8 +3,17 @@
 
     angular
         .module('app')
-        .config(config);
+        .config(config)
+        .run(run);
 
-    function config(){
+    config.$inject = ['CONFIG', '$sceDelegateProvider'];
+    run.$inject = ['CONFIG', '$rootScope'];
+
+    function config(CONFIG, $sceDelegateProvider){
+        $sceDelegateProvider.resourceUrlWhitelist(['self', CONFIG.cdn + '**']);
+    }
+
+    function run(CONFIG, $rootScope){
+        $rootScope.CONFIG = CONFIG;
     }
 })();
