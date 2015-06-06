@@ -5,7 +5,7 @@
         .module('app')
         .constant('CONFIG', {
             pageTitle: 'ngBoilerplate',
-            apiBaseUrl: 'http://jsonplaceholder.typicode.com/',
+            apiBaseUrl: '/api/v1/',
             resourceUrlWhitelist: [
                 'https://*.s3.amazonaws.com/'
             ],

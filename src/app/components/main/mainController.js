@@ -2,13 +2,12 @@
     'use strict';
 
     angular
-        .module('app.main')
+        .module('app')
         .controller('mainController', mainController);
 
     mainController.$inject = [];
 
     function mainController(){
-        /* jshint validthis: true */
         var vm = this;
 
         init();

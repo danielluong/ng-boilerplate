@@ -1,21 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="app">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    <title>ng-boilerplate</title>
+    <title ng-bind="$state.current.data.pageTitle ? $root.$state.current.data.pageTitle + ' | ' + $root.CONFIG.pageTitle : $root.CONFIG.pageTitle"></title>
     
     <!-- build:css styles/vendor.css -->
     <!-- endbuild -->
     
     <!-- build:css styles/app.css -->
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/reset.css" />
+    <link rel="stylesheet" href="styles/main.css" />
     <!-- endbuild -->
 </head>
-<body ng-app="app">
-    <div class="ui-view-con" autoscroll="true" ui-view></div>
+<body>
+    <div class="ui-view"></div>
 
     <!-- build:js scripts/vendor.js -->
     <script src="../bower_components/angular/angular.js"></script>
@@ -24,24 +25,18 @@
     <!-- endbuild -->
 
     <!-- build:js scripts/app.js -->
-    <script src="app/app.module.js"></script>
+    <script src="app/app.js"></script>
     <script src="app/app.config.js"></script>
     <script src="app/app.init.js"></script>
     <script src="app/app.routes.js"></script>
 
-    <script src="app/shared/utils/app.utils.js"></script>
-    <script src="app/shared/utils/base64Service.js"></script>
-    <script src="app/shared/utils/resourceService.js"></script>
-
-    <script src="app/shared/directives/app.directives.js"></script>
+    <script src="app/shared/services/base64Service.js"></script>
+    <script src="app/shared/services/resourceService.js"></script>
     
-    <script src="app/shared/auth/app.auth.js"></script>
-    <script src="app/shared/auth/auth.js"></script>
-    <script src="app/shared/auth/authService.js"></script>
+    <script src="app/shared/components/auth/app.auth.js"></script>
+    <script src="app/shared/components/auth/authService.js"></script>
 
-    <script src="app/components/login/app.login.js"></script>
     <script src="app/components/login/loginController.js"></script>
-    <script src="app/components/main/app.main.js"></script>
     <script src="app/components/main/mainController.js"></script>
     <!-- endbuild -->
 </body>

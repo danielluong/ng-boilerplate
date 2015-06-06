@@ -11,7 +11,8 @@ module.exports = function (grunt) {
     // Configurable paths
     var config = {
         src: 'src',
-        dist: 'dist'
+        dist: 'dist',
+        defaultConfig: 'local'
     };
 
     // Define the configuration for all the tasks
@@ -87,6 +88,30 @@ module.exports = function (grunt) {
                     src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
                     dest: '<%= config.dist %>'
                 }]
+            },
+            defaultConfig: {
+                files: [{
+                    src: '<%= config.src %>/app/config/local.<%= config.defaultConfig %>.js',
+                    dest: '<%= config.src %>/app/app.config.js',
+                }]
+            },
+            devConfig: {
+                files: [{
+                    src: '<%= config.src %>/app/config/dev.config.js',
+                    dest: '<%= config.src %>/app/app.config.js',
+                }]
+            },
+            stageConfig: {
+                files: [{
+                    src: '<%= config.src %>/app/config/stage.config.js',
+                    dest: '<%= config.src %>/app/app.config.js',
+                }]
+            },
+            prodConfig: {
+                files: [{
+                    src: '<%= config.src %>/app/config/prod.config.js',
+                    dest: '<%= config.src %>/app/app.config.js',
+                }]
             }
         },
 
@@ -126,7 +151,7 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('default', [
+    var defaultTasks = [
         'clean:dist',
         'jshint',
         'useminPrepare',
@@ -136,6 +161,12 @@ module.exports = function (grunt) {
         'copy:dist',
         'usemin',
         'htmlmin',
-        'clean:tmp'
-    ]);
+        'clean:tmp',
+        'copy:defaultConfig'
+    ];
+
+    grunt.registerTask('default', defaultTasks);
+    grunt.registerTask('dev', [].concat(['copy:devConfig'], defaultTasks));
+    grunt.registerTask('stage', [].concat(['copy:stageConfig'], defaultTasks));
+    grunt.registerTask('prod', [].concat(['copy:prodConfig'], defaultTasks));
 };

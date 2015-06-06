@@ -2,13 +2,12 @@
     'use strict';
 
     angular
-        .module('app.login')
+        .module('app')
         .controller('loginController', loginController);
     
-    loginController.$inject = ['authService', '$rootScope', '$state'];
+    loginController.$inject = ['$rootScope', '$state', 'resourceService', 'authService'];
 
-    function loginController(authService, $rootScope, $state){
-        /* jshint validthis: true */
+    function loginController($rootScope, $state, resourceService, authService){
         var vm = this;
         
         vm.loading = false;
@@ -19,7 +18,7 @@
         init();
 
         function init(){
-            authService.logout();
+            authService.unsetUser();
         }
 
         function submit(){
@@ -30,9 +29,9 @@
             vm.loading = true;
             vm.errors = [];
 
-            authService.login(vm.credentials)
+            resourceService.post('login', credentials)
             .then(function(response){
-                authService.setUser(response.data.data);
+                authService.setUser(response.data);
                 
                 if($rootScope.redirectTo){
                     $state.go($rootScope.redirectTo.state.name, $rootScope.redirectTo.params);
@@ -41,9 +40,8 @@
                     $state.go('default');
                 }
             }, function(response){
-                vm.errors = response.data.error.message.split('\\n');
-            })
-            .finally(function(){
+                vm.errors = response.data.errors;
+            }).finally(function(){
                 vm.loading = false;
             });
         }

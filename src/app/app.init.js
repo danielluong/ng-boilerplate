@@ -7,13 +7,16 @@
         .run(run);
 
     config.$inject = ['CONFIG', '$sceDelegateProvider'];
-    run.$inject = ['CONFIG', '$rootScope'];
+    run.$inject = ['$rootScope', 'CONFIG', '$state'];
 
     function config(CONFIG, $sceDelegateProvider){
-        $sceDelegateProvider.resourceUrlWhitelist(['self', CONFIG.cdn + '**']);
+        CONFIG.resourceUrlWhitelist.map(function(url){
+            $sceDelegateProvider.resourceUrlWhitelist(['self', url + '**']);
+        });
     }
 
-    function run(CONFIG, $rootScope){
+    function run($rootScope, CONFIG, $state){
         $rootScope.CONFIG = CONFIG;
+        $rootScope.$state = $state;
     }
 })();

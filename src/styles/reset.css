@@ -1,0 +1,57 @@
+/* ==========================================================================
+   Reset
+   ========================================================================== */
+html {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    font-weight: 400;
+    line-height: 1.2;
+    -webkit-box-sizing: inherit;
+    -moz-box-sizing: inherit;
+    -ms-box-sizing: inherit;
+    box-sizing: inherit;
+}
+*:focus {
+    outline: 0;
+}
+html,
+body {
+    height: 100%;
+}
+html {
+    font-size: 16px;
+}
+body {
+    margin: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+img, video, table {
+    width: 100%;
+}
+img, video {
+    display: block;
+}
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+}
+
+/** Remove dotted outlines **/
+a, a:hover, a:active, a:focus {
+	outline: 0;
+}
+object, embed { 
+	outline: 0;
+}
+input::-moz-focus-inner { 
+	border: 0; 
+}

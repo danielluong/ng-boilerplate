@@ -16,13 +16,16 @@
                 templateUrl: 'app/components/login/loginView.html',
                 controller: 'loginController',
                 controllerAs: 'login',
-                isPublic: true
+                isPublic: true,
+                data: { pageTitle: 'Login' }
             })
             .state('main', {
                 url: '/main',
                 templateUrl: 'app/components/main/mainView.html',
                 controller: 'mainController',
-                controllerAs: 'main'
+                controllerAs: 'main',
+                isPublic: true,
+                data: { pageTitle: 'Main' }
             })
             .state('default', {
                 url: '/',
