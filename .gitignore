@@ -1,5 +1,6 @@
 .DS_Store
-.tmp
 node_modules
 bower_components
+src/app/app.config.js
+.tmp
 dist

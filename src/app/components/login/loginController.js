@@ -5,11 +5,10 @@
         .module('app')
         .controller('loginController', loginController);
     
-    loginController.$inject = ['$rootScope', '$state', 'resourceService', 'authService'];
+    loginController.$inject = ['authService', 'resourceService', '$rootScope', '$state'];
 
-    function loginController($rootScope, $state, resourceService, authService){
+    function loginController(authService, resourceService, $rootScope, $state){
         var vm = this;
-        
         vm.loading = false;
         vm.errors = [];
         vm.credentials = {};
@@ -18,7 +17,7 @@
         init();
 
         function init(){
-            authService.unsetUser();
+            authService.unsetAuth();
         }
 
         function submit(){
@@ -31,7 +30,7 @@
 
             resourceService.post('login', credentials)
             .then(function(response){
-                authService.setUser(response.data);
+                authService.setAuth(response.data, response.data.token);
                 
                 if($rootScope.redirectTo){
                     $state.go($rootScope.redirectTo.state.name, $rootScope.redirectTo.params);

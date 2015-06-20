@@ -17,9 +17,9 @@
         .module('app')
         .service('resourceService', resourceService);
 
-    resourceService.$inject = ['$rootScope', '$q', '$http', '$state'];
+    resourceService.$inject = ['$q', '$rootScope', '$http', '$state', 'authService'];
 
-    function resourceService($rootScope, $q, $http, $state){
+    function resourceService($q, $rootScope, $http, $state, authService){
     
         return {
             xhr: xhr,
@@ -31,7 +31,7 @@
             delete: destroy
         };
 
-        function xhr(method, url, requestData){
+        function xhr(method, url, requestData, baseUrlOverride){
             // The timeout property of the http request takes a deferred value
             // that will abort the underying AJAX request if / when the deferred
             // value is resolved.
@@ -40,7 +40,7 @@
             // Set AJAX request parameters.
             var options = {
                 method: method,
-                url: $rootScope.CONFIG.apiBaseUrl + url,
+                url: baseUrlOverride ? baseUrlOverride + url : $rootScope.CONFIG.apiBaseUrl + url,
                 timeout: deferredAbort.promise
             };
 
@@ -64,9 +64,10 @@
                     return response;
                 },
                 function(response){
-                    if(response.status === 401 || response.status === 403){
-                        $rootScope.redirectTo = { state: $state.current, params: $state.params };
-                        $state.go('login', { redirectTo: $state.current.url });
+                    if(response.status === 0){
+                        response.canceled = true;
+                    } else if(response.status === 401 || response.status === 403){
+                        authService.requestAuth($state.current, $state.params);
                     }
 
                     return $q.reject(response);
@@ -96,28 +97,28 @@
             return promise;
         }
 
-        function query(type, params){
-            return xhr('GET', type, params);
+        function query(resource, params, baseUrlOverride){
+            return xhr('GET', resource, params, baseUrlOverride);
         }
 
-        function get(type, id, params){
-            return xhr('GET', type + '/' + id, params);
+        function get(resource, id, params, baseUrlOverride){
+            return xhr('GET', resource + '/' + id, params, baseUrlOverride);
         }
 
-        function post(type, data){
-            return xhr('POST', type, data);
+        function post(resource, data, baseUrlOverride){
+            return xhr('POST', resource, data, baseUrlOverride);
         }
 
-        function put(type, id, data){
-            return xhr('PUT', type + '/' + id, data);
+        function put(resource, id, data, baseUrlOverride){
+            return xhr('PUT', resource + '/' + id, data, baseUrlOverride);
         }
 
-        function patch(type, id, data){
-            return xhr('PATCH', type + '/' + id, data);
+        function patch(resource, id, data, baseUrlOverride){
+            return xhr('PATCH', resource + '/' + id, data, baseUrlOverride);
         }
 
-        function destroy(type, id){
-            return xhr('DELETE', type + '/' + id);
+        function destroy(resource, id, data, baseUrlOverride){
+            return xhr('DELETE', resource + '/' + id, data, baseUrlOverride);
         }
     }
 })();

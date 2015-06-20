@@ -91,25 +91,25 @@ module.exports = function (grunt) {
             },
             defaultConfig: {
                 files: [{
-                    src: '<%= config.src %>/app/config/local.<%= config.defaultConfig %>.js',
+                    src: '<%= config.src %>/app/config/<%= config.defaultConfig %>.js',
                     dest: '<%= config.src %>/app/app.config.js',
                 }]
             },
             devConfig: {
                 files: [{
-                    src: '<%= config.src %>/app/config/dev.config.js',
+                    src: '<%= config.src %>/app/config/dev.js',
                     dest: '<%= config.src %>/app/app.config.js',
                 }]
             },
             stageConfig: {
                 files: [{
-                    src: '<%= config.src %>/app/config/stage.config.js',
+                    src: '<%= config.src %>/app/config/stage.js',
                     dest: '<%= config.src %>/app/app.config.js',
                 }]
             },
             prodConfig: {
                 files: [{
-                    src: '<%= config.src %>/app/config/prod.config.js',
+                    src: '<%= config.src %>/app/config/prod.js',
                     dest: '<%= config.src %>/app/app.config.js',
                 }]
             }
@@ -166,7 +166,7 @@ module.exports = function (grunt) {
     ];
 
     grunt.registerTask('default', defaultTasks);
-    grunt.registerTask('dev', [].concat(['copy:devConfig'], defaultTasks));
-    grunt.registerTask('stage', [].concat(['copy:stageConfig'], defaultTasks));
-    grunt.registerTask('prod', [].concat(['copy:prodConfig'], defaultTasks));
+    grunt.registerTask('dev', ['copy:devConfig'].concat(defaultTasks));
+    grunt.registerTask('stage', ['copy:stageConfig'].concat(defaultTasks));
+    grunt.registerTask('prod', ['copy:prodConfig'].concat(defaultTasks));
 };

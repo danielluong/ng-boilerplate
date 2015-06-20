@@ -5,24 +5,19 @@
         .module('app.auth', ['ngCookies'])
         .run(run);
 
-    run.$inject = ['$rootScope', '$cookieStore', '$http', '$state', 'base64Service'];
+    run.$inject = ['authService', '$rootScope'];
 
-    function run($rootScope, $cookieStore, $http, $state, base64Service){
-        $rootScope.user = $cookieStore.get('user');
+    function run(authService, $rootScope){
+        var authToken = authService.getToken();
 
-        if($rootScope.user){
-            $rootScope.user = JSON.parse(base64Service.decode($rootScope.user));
-        }
-        
-        if($rootScope.user && $rootScope.user.token && $rootScope.user.token.token){
-            $http.defaults.headers.common['token'] = $rootScope.user.token.token;
+        if(authToken){
+            authService.setToken(authToken);
         }
 
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
-            if(!toState.isPublic && (!$rootScope.user || !$rootScope.user.token || !$rootScope.user.token.token)){
+            if(!toState.isPublic && !authToken){
                 event.preventDefault();
-                $rootScope.redirectTo = { state: toState, params: toParams };
-                $state.go('login', { redirectTo: toState.url });
+                authService.requestAuth(toState, toParams);
             }
         });
     }
