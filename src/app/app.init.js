@@ -18,5 +18,12 @@
     function run($rootScope, CONFIG, $state){
         $rootScope.CONFIG = CONFIG;
         $rootScope.$state = $state;
+
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+            if(fromState.name.substring(0, toState.name.length) === toState.name
+            && angular.equals(fromParams, toParams)){
+                event.preventDefault();
+            }
+        });
     }
 })();

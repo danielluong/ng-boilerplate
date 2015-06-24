@@ -5,9 +5,9 @@
         .module('app.auth')
         .service('authService', authService);
 
-    authService.$inject = ['$rootScope', '$state', '$http', '$cookieStore', 'base64Service'];
+    authService.$inject = ['$rootScope', '$state', '$http', 'localStorageService', 'base64Service'];
 
-    function authService($rootScope, $state, $http, $cookieStore, base64Service){
+    function authService($rootScope, $state, $http, localStorageService, base64Service){
 
         return {
             requestAuth: requestAuth,
@@ -22,7 +22,10 @@
         };
 
         function requestAuth(toState, toParams){
-            $rootScope.redirectTo = { state: toState, params: toParams };
+            if (toState.name !== 'login') {
+                $rootScope.redirectTo = {state: toState, params: toParams};
+            }
+
             $state.go('login', { redirectTo: toState.url });
         }
 
@@ -31,26 +34,26 @@
         }
 
         function setToken(token){
-            $http.defaults.headers.common['Authorization'] = token;
-            $cookieStore.put('authToken', token);
+            $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+            localStorageService.set('authToken', token);
         }
 
         function unsetToken(){
             delete $http.defaults.headers.common['Authorization'];
-            $cookieStore.remove('authToken');
+            localStorageService.remove('authToken');
         }
 
         function getUser(){
-            var user = $cookieStore.get('user');
+            var user = localStorageService.get('user');
             return user ? JSON.parse(base64Service.decode(user)) : null;
         }
 
         function setUser(user){
-            $cookieStore.put('user', base64Service.encode(JSON.stringify(user)));
+            localStorageService.set('user', base64Service.encode(JSON.stringify(user)));
         }
 
         function unsetUser(){
-            $cookieStore.remove('user');
+            localStorageService.remove('user');
         }
         
         function setAuth(user, token){
